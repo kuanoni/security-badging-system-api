@@ -1,14 +1,24 @@
 const express = require('express');
-const Model = require('../models/model');
+const Cardholder = require('../models/cardholderModel');
 
 const router = express.Router();
 module.exports = router;
 
 //Post Method
 router.post('/post', async (req, res) => {
-	const data = new Model({
-		name: req.body.name,
-		age: req.body.age,
+	const data = new Credential({
+		avatar: req.body.avatar,
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
+		email: req.body.email,
+		employeeId: req.body.employeeId,
+		jobTitle: req.body.jobTitle,
+		profileStatus: req.body.profileStatus,
+		activationDate: req.body.badgeOwnerName,
+		expirationDate: req.body.expirationDate,
+		profileType: req.body.profileType,
+		credentials: req.body.credentials,
+		accessGroups: req.body.accessGroups,
 	});
 
 	try {
@@ -20,7 +30,7 @@ router.post('/post', async (req, res) => {
 });
 
 //Get all Method
-router.get('/getAll', async (req, res) => {
+router.get('/get', async (req, res) => {
 	try {
 		const data = await Model.find();
 		res.json(data);
@@ -30,7 +40,7 @@ router.get('/getAll', async (req, res) => {
 });
 
 //Get by ID Method
-router.get('/getOne/:id', async (req, res) => {
+router.get('/get/:id', async (req, res) => {
 	try {
 		const data = await Model.findById(req.params.id);
 		res.json(data);

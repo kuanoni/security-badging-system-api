@@ -1,12 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const routes = require('./routes/routes');
+const cardholderRoutes = require('./routes/cardholderRoutes');
+const credentialRoutes = require('./routes/credentialRoutes');
 
 const app = express();
 
 app.use(express.json());
 
-app.use('/api', routes);
+app.use('/cardholders', cardholderRoutes);
+app.use('/credentials', credentialRoutes);
 
 app.listen(3000, () => {
 	console.log(`Server Started at ${3000}`);
