@@ -6,7 +6,7 @@ module.exports = router;
 
 //Post Method
 router.post('/post', async (req, res) => {
-	const data = new Credential({
+	const data = new Cardholder({
 		avatar: req.body.avatar,
 		firstName: req.body.firstName,
 		lastName: req.body.lastName,
@@ -32,7 +32,7 @@ router.post('/post', async (req, res) => {
 //Get all Method
 router.get('/get', async (req, res) => {
 	try {
-		const data = await Model.find();
+		const data = await Cardholder.find();
 		res.json(data);
 	} catch (error) {
 		res.status(400).json({ message: error.message });
@@ -42,7 +42,7 @@ router.get('/get', async (req, res) => {
 //Get by ID Method
 router.get('/get/:id', async (req, res) => {
 	try {
-		const data = await Model.findById(req.params.id);
+		const data = await Cardholder.findById(req.params.id);
 		res.json(data);
 	} catch (error) {
 		res.status(400).json({ message: error.message });
@@ -56,7 +56,7 @@ router.patch('/update/:id', async (req, res) => {
 		const updatedData = req.body;
 		const options = { new: true };
 
-		const result = await Model.findByIdAndUpdate(id, updatedData, options);
+		const result = await Cardholder.findByIdAndUpdate(id, updatedData, options);
 
 		res.send(result);
 		console.log(result);
@@ -69,7 +69,7 @@ router.patch('/update/:id', async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
 	try {
 		const id = req.params.id;
-		const data = await Model.findByIdAndDelete(id);
+		const data = await Cardholder.findByIdAndDelete(id);
 		res.send(`Document with ${data.name} has been deleted..`);
 	} catch (error) {
 		res.status(400).json({ message: error.message });
