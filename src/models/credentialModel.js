@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const credentialSchema = mongoose.Schema({
+	_id: {
+		required: true,
+		type: Number,
+	},
 	badgeNumber: {
 		type: Number,
 		required: true,

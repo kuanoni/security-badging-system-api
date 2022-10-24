@@ -1,0 +1,12 @@
+[
+  { "groupName": "Global Access", "id": 1 },
+  { "groupName": "General Access", "id": 2 },
+  { "groupName": "Lab Access", "id": 3 },
+  { "groupName": "Lab 2 Access", "id": 4 },
+  { "groupName": "Fabrication Access", "id": 5 },
+  { "groupName": "Fabrication 2 Access", "id": 6 },
+  { "groupName": "Tech Access", "id": 7 },
+  { "groupName": "Custodian Access", "id": 8 },
+  { "groupName": "Cafeteria Access", "id": 9 },
+  { "groupName": "Bar Access", "id": 10 }
+]

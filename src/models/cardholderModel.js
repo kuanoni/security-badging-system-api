@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const cardholderSchema = new mongoose.Schema({
+	_id: {
+		required: true,
+		type: Number,
+	},
 	avatar: {
 		required: true,
 		type: String,
@@ -43,7 +47,7 @@ const cardholderSchema = new mongoose.Schema({
 	},
 	credentials: {
 		required: true,
-		type: [{ badgeNumber: Number }],
+		type: [{ _id: Number, badgeNumber: Number }],
 	},
 	accessGroups: {
 		required: true,

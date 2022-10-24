@@ -1,0 +1,91 @@
+[
+  {
+    "_id": "1",
+    "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/105.jpg",
+    "firstName": "Allan",
+    "lastName": "Halvorson",
+    "email": "Allan.Halvorson@company.com",
+    "employeeId": 829615,
+    "jobTitle": "Facilitator",
+    "profileStatus": true,
+    "activationDate": "2021-07-14T21:35:03.194Z",
+    "expirationDate": "2023-12-13T12:27:34.862Z",
+    "profileType": "Employee",
+    "credentials": [
+      { "_id": 1, "badgeNumber": 19610 },
+      { "_id": 2, "badgeNumber": 23813 }
+    ],
+    "accessGroups": [{ "groupName": "Global Access" }]
+  },
+  {
+    "_id": "2",
+    "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/590.jpg",
+    "firstName": "Alycia",
+    "lastName": "Schowalter",
+    "email": "Alycia.Schowalter@company.com",
+    "employeeId": 712892,
+    "jobTitle": "Associate",
+    "profileStatus": true,
+    "activationDate": "2022-07-07T16:11:19.824Z",
+    "expirationDate": "2023-08-28T17:45:46.991Z",
+    "profileType": "Employee",
+    "credentials": [{ "_id": 3, "badgeNumber": 78487 }],
+    "accessGroups": [{ "groupName": "Global Access" }]
+  },
+  {
+    "_id": "3",
+    "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/78.jpg",
+    "firstName": "Cortney",
+    "lastName": "Dicki",
+    "email": "Cortney.Dicki@company.com",
+    "employeeId": 6181,
+    "jobTitle": "Orchestrator",
+    "profileStatus": true,
+    "activationDate": "2021-11-20T20:57:14.447Z",
+    "expirationDate": "2024-06-15T01:27:52.791Z",
+    "profileType": "Employee",
+    "credentials": [],
+    "accessGroups": [
+      { "groupName": "Lab 2 Access" },
+      { "groupName": "Global Access" },
+      { "groupName": "General Access" }
+    ]
+  },
+  {
+    "_id": "4",
+    "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/568.jpg",
+    "firstName": "Romaine",
+    "lastName": "O'Keefe",
+    "email": "Romaine.O'Keefe@company.com",
+    "employeeId": 12239,
+    "jobTitle": "Consultant",
+    "profileStatus": false,
+    "activationDate": "2020-12-12T21:33:41.402Z",
+    "expirationDate": "2022-01-25T21:09:58.797Z",
+    "profileType": "Employee",
+    "credentials": [],
+    "accessGroups": [
+      { "groupName": "Lab Access" },
+      { "groupName": "Global Access" }
+    ]
+  },
+  {
+    "_id": "5",
+    "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/455.jpg",
+    "firstName": "Corrine",
+    "lastName": "Robel",
+    "email": "Corrine.Robel@company.com",
+    "employeeId": 215129,
+    "jobTitle": "Officer",
+    "profileStatus": true,
+    "activationDate": "2021-06-22T07:13:19.626Z",
+    "expirationDate": "2023-12-06T01:48:47.207Z",
+    "profileType": "Privileged Visitor",
+    "credentials": [{ "_id": 4, "badgeNumber": 36114 }],
+    "accessGroups": [
+      { "groupName": "Fabrication 2 Access" },
+      { "groupName": "Lab 2 Access" },
+      { "groupName": "Fabrication Access" }
+    ]
+  }
+]

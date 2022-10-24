@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "nodemon src/index.js",
+        "makeData": "node src/makeFakeData/index.js && npx prettier --write src/makeFakeData/*.json",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
@@ -15,5 +16,8 @@
         "express": "^4.18.2",
         "mongoose": "^6.6.7",
         "nodemon": "^2.0.20"
+    },
+    "devDependencies": {
+        "@faker-js/faker": "^7.6.0"
     }
 }
