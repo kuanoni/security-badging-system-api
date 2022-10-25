@@ -6,7 +6,7 @@ const credentialSchema = mongoose.Schema({
 		type: Number,
 	},
 	badgeNumber: {
-		type: Number,
+		type: String,
 		required: true,
 	},
 	badgeType: {

@@ -1,14 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cardholderRoutes = require('./routes/cardholderRoutes');
-const credentialRoutes = require('./routes/credentialRoutes');
+const cardholderModel = require('./models/cardholderModel');
+const credentialModel = require('./models/credentialModel');
+const createRouterForModel = require('./routes/routes');
 
 const app = express();
 
 app.use(express.json());
 
-app.use('/cardholders', cardholderRoutes);
-app.use('/credentials', credentialRoutes);
+app.use('/cardholders', createRouterForModel(cardholderModel));
+app.use('/credentials', createRouterForModel(credentialModel));
 
 app.listen(3000, () => {
 	console.log(`Server Started at ${3000}`);

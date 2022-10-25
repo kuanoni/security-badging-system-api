@@ -23,7 +23,7 @@ const cardholderSchema = new mongoose.Schema({
 	},
 	employeeId: {
 		required: true,
-		type: Number,
+		type: String,
 	},
 	jobTitle: {
 		required: true,
