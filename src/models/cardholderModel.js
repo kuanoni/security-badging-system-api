@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cardholderSchema = new mongoose.Schema({
 	_id: {
 		required: true,
-		type: Number,
+		type: String,
 	},
 	avatar: {
 		required: true,

@@ -29,10 +29,15 @@ router.post('/post', async (req, res) => {
 	}
 });
 
-//Get all Method
+//Get Method
 router.get('/get', async (req, res) => {
+	const queryValue = new RegExp('.*' + req.query.value + '.*', 'i');
+	const queryObj = {
+		[req.query.searchBy]: { $regex: queryValue },
+	};
+
 	try {
-		const data = await Cardholder.find();
+		const data = await Cardholder.find(queryObj);
 		res.json(data);
 	} catch (error) {
 		res.status(400).json({ message: error.message });
