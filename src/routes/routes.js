@@ -70,7 +70,6 @@ const createRouterForModel = (model) => {
 			const result = await model.findByIdAndUpdate(id, updatedData, options);
 
 			res.send(result);
-			console.log(result);
 		} catch (error) {
 			res.status(400).json({ message: error.message });
 		}
