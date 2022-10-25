@@ -50,16 +50,6 @@ const createRouterForModel = (model) => {
 		}
 	});
 
-	//Get total count Method
-	router.get('/count', async (req, res) => {
-		try {
-			const data = await model.find().estimatedDocumentCount();
-			res.json(data);
-		} catch (error) {
-			res.status(400).json({ message: error.message });
-		}
-	});
-
 	//Update by ID Method
 	router.patch('/update/:id', async (req, res) => {
 		try {
