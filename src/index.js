@@ -15,7 +15,7 @@ app.use(morgan('tiny'));
 app.use((req, res, next) => {
 	const apiKey = req.get('API-Key');
 	if (!apiKey || apiKey !== process.env.API_KEY) {
-		res.status(401).json({ error: 'unauthorised API Key' });
+		res.status(401).json({ message: 'unauthorised API Key' });
 	} else {
 		next();
 	}
