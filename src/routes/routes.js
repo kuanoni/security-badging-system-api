@@ -34,7 +34,17 @@ const createRouterForModel = (model) => {
 					[req.query.searchBy]: 'asc',
 				}
 			);
-			res.json(data);
+
+			const count = await model
+				.find(queryObj)
+				.sort(
+					req.query.searchBy && {
+						[req.query.searchBy]: 'asc',
+					}
+				)
+				.countDocuments();
+
+			res.json({ documents: data, count });
 		} catch (error) {
 			res.status(400).json({ message: error.message });
 		}
