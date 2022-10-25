@@ -28,8 +28,6 @@ const createRouterForModel = (model) => {
 		const page = req.query.page || 1;
 		const limit = req.query.limit || 30;
 
-		console.log(queryObj);
-
 		try {
 			const data = await model.find(queryObj, null, { limit, skip: limit * (page - 1) }).sort(
 				req.query.searchBy && {
