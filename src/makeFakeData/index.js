@@ -5,8 +5,8 @@ const makeCredentials = (count) => {
 	let creds = [];
 	for (let i = 0; i < count; i++) {
 		creds.push({
-			_id: i + 1,
-			badgeNumber: faker.datatype.number({ min: 10000, max: 99999 }),
+			_id: (i + 1).toString(),
+			badgeNumber: faker.datatype.number({ min: 10000, max: 99999 }).toString(),
 			badgeType: pickRandomOutOfList(['Employee', 'Contractor', 'Privileged Visitor']),
 			badgeOwnerId: '',
 			badgeOwnerName: '',
@@ -46,7 +46,7 @@ const makeCardholders = (count) => {
 		const firstName = faker.name.firstName();
 		const lastName = faker.name.lastName();
 		const email = `${firstName}.${lastName}@company.com`;
-		const employeeId = faker.datatype.number(1000000, 9999999);
+		const employeeId = faker.datatype.number(1000000, 9999999).toString();
 		const jobTitle = faker.name.jobType();
 		const activationDate = faker.date.past(2);
 		const expirationDate = faker.date.between(activationDate, new Date().setFullYear(new Date().getFullYear() + 2));
