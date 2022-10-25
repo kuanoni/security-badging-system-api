@@ -31,13 +31,20 @@ router.post('/post', async (req, res) => {
 
 //Get Method
 router.get('/get', async (req, res) => {
-	const queryValue = new RegExp('.*' + req.query.value + '.*', 'i');
+	const searchValue = new RegExp('.*' + req.query.value + '.*', 'i');
 	const queryObj = {
-		[req.query.searchBy]: { $regex: queryValue },
+		[req.query.searchBy]: { $regex: searchValue },
 	};
 
+	const page = req.query.page || 1;
+	const limit = req.query.limit || 30;
+
 	try {
-		const data = await Cardholder.find(queryObj);
+		const data = await Cardholder.find(queryObj, null, { limit, skip: limit * (page - 1) })
+			.sort({
+				[req.query.searchBy]: 'asc',
+			})
+			.exec();
 		res.json(data);
 	} catch (error) {
 		res.status(400).json({ message: error.message });
@@ -48,6 +55,16 @@ router.get('/get', async (req, res) => {
 router.get('/get/:id', async (req, res) => {
 	try {
 		const data = await Cardholder.findById(req.params.id);
+		res.json(data);
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+});
+
+//Get total count Method
+router.get('/count', async (req, res) => {
+	try {
+		const data = await Cardholder.find().estimatedDocumentCount();
 		res.json(data);
 	} catch (error) {
 		res.status(400).json({ message: error.message });

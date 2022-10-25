@@ -111,7 +111,7 @@ const writeJson = (fileName, obj) => {
 	fs.writeFile(`./src/makeFakeData/${fileName}.json`, JSON.stringify(obj), 'utf8', () => {});
 };
 
-const { cardholders, credentials, accessGroups } = makeCardholders(5);
+const { cardholders, credentials, accessGroups } = makeCardholders(500);
 
 writeJson('credentials', credentials);
 writeJson('accessGroups', accessGroups);
