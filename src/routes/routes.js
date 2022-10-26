@@ -23,26 +23,20 @@ const createRouterForModel = (model) => {
 	//Get Method
 	router.get('/get', async (req, res) => {
 		const searchValue = new RegExp('^' + req.query.value?.toLowerCase(), 'i');
-		const queryObj = { [req.query.searchBy]: { $regex: searchValue } };
+		const filter = { [req.query.filter]: { $regex: searchValue } };
+		const projection = req.query.props ? req.query.props.replace(',', ' ') : '';
 
 		const page = req.query.page || 1;
 		const limit = req.query.limit || 30;
 
 		try {
-			const data = await model.find(queryObj, null, { limit, skip: limit * (page - 1) }).sort(
-				req.query.searchBy && {
-					[req.query.searchBy]: 'asc',
+			const data = await model.find(filter, projection, { limit, skip: limit * (page - 1) }).sort(
+				req.query.filter && {
+					[req.query.filter]: 'asc',
 				}
 			);
 
-			const count = await model
-				.find(queryObj)
-				.sort(
-					req.query.searchBy && {
-						[req.query.searchBy]: 'asc',
-					}
-				)
-				.countDocuments();
+			const count = await model.find(filter, projection).countDocuments();
 
 			res.json({ documents: data, count });
 		} catch (error) {
