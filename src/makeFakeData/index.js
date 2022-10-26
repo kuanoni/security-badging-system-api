@@ -5,8 +5,7 @@ const makeCredentials = (count) => {
 	let creds = [];
 	for (let i = 0; i < count; i++) {
 		creds.push({
-			_id: (i + 1).toString(),
-			badgeNumber: faker.datatype.number({ min: 10000, max: 99999 }).toString(),
+			_id: faker.datatype.number({ min: 10000, max: 99999 }).toString(),
 			badgeType: pickRandomOutOfList(['Employee', 'Contractor', 'Privileged Visitor']),
 			badgeOwnerId: '',
 			badgeOwnerName: '',
@@ -30,7 +29,7 @@ const makeAccessGroups = () => {
 		'Bar Access',
 	];
 
-	return groups.map((group, i) => ({ groupName: group, id: i + 1 }));
+	return groups.map((group, i) => ({ _id: i + 1, groupName: group, groupMembers: [] }));
 };
 
 const makeCardholders = (count) => {
@@ -46,7 +45,7 @@ const makeCardholders = (count) => {
 		const firstName = faker.name.firstName();
 		const lastName = faker.name.lastName();
 		const email = `${firstName}.${lastName}@company.com`;
-		const employeeId = faker.datatype.number(1000000, 9999999).toString();
+		const employeeId = faker.datatype.number({ min: 10000000, max: 99999999 }).toString();
 		const jobTitle = faker.name.jobType();
 		const activationDate = faker.date.past(2);
 		const expirationDate = faker.date.between(activationDate, new Date().setFullYear(new Date().getFullYear() + 2));
@@ -55,14 +54,17 @@ const makeCardholders = (count) => {
 
 		const cholderCreds = [];
 		const cholderGroups = getUniqueRandomNumbers(Math.floor(Math.random() * 3 + 1), accessGroups.length).map(
-			(num) => accessGroups[num]
+			(num) => {
+				accessGroups[num].groupMembers.push(employeeId);
+				return { _id: num, groupName: accessGroups[num].groupName };
+			}
 		);
 
 		if (cardholdersIdsWithCreds.includes(i)) {
 			for (let j = 0; j < Math.floor(Math.random() * 3); j++) {
 				const cred = {
 					...tempCreds.shift(),
-					badgeOwnerId: (i + 1).toString(),
+					badgeOwnerId: employeeId,
 					badgeOwnerName: firstName + ' ' + lastName,
 				};
 				cholderCreds.push(cred);
@@ -71,19 +73,18 @@ const makeCardholders = (count) => {
 		}
 
 		cardholders.push({
-			_id: (i + 1).toString(),
+			_id: employeeId,
 			avatar,
 			firstName,
 			lastName,
 			email,
-			employeeId,
 			jobTitle,
 			profileStatus,
 			activationDate,
 			expirationDate,
 			profileType,
 			credentials: cholderCreds.map((cred) => ({ _id: cred._id, badgeNumber: cred.badgeNumber })),
-			accessGroups: cholderGroups.map((group) => ({ groupName: group.groupName })),
+			accessGroups: cholderGroups.sort((groupA, groupB) => groupA._id > groupB._id),
 		});
 	}
 

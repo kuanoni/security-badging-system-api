@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const cardholderModel = require('./models/cardholderModel');
 const credentialModel = require('./models/credentialModel');
+const accessGroupModel = require('./models/accessGroupsModel');
 const createRouterForModel = require('./routes/routes');
 
 require('dotenv').config();
@@ -16,6 +17,7 @@ app.use(morgan('tiny'));
 
 app.use('/cardholders', createRouterForModel(cardholderModel));
 app.use('/credentials', createRouterForModel(credentialModel));
+app.use('/accessGroups', createRouterForModel(accessGroupModel));
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
