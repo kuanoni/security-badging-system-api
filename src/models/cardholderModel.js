@@ -28,7 +28,7 @@ const cardholderSchema = new mongoose.Schema(
 		},
 		profileStatus: {
 			required: true,
-			type: String,
+			type: Boolean,
 		},
 		activationDate: {
 			required: true,
