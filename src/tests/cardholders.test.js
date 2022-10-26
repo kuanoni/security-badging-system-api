@@ -26,3 +26,16 @@ describe('GET /cardholders with projection', () => {
 		});
 	});
 });
+
+describe('GET /cardholders with filter', () => {
+	it('should return filtered cardholders', async () => {
+		const filterValue = 'kai';
+		const res = await request(app).get('/cardholders/get?filter=firstName&value=' + filterValue);
+		testFn.checkForResponseWithDocuments(res);
+		expect(res.body.documents.length).toBeGreaterThan(0);
+
+		res.body.documents.forEach((document) => {
+			expect(document.firstName.includes(filterValue));
+		});
+	});
+});
