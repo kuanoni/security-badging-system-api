@@ -1,20 +1,19 @@
 const mongoose = require('mongoose');
 
-const credentialSchema = mongoose.Schema({
-	_id: {
-		required: true,
-		type: Number,
+const credentialSchema = new mongoose.Schema(
+	{
+		_id: {
+			required: true,
+			type: Number,
+		},
+		badgeType: {
+			type: String,
+			required: true,
+		},
+		badgeOwnerId: String,
+		badgeOwnerName: String,
 	},
-	badgeNumber: {
-		type: String,
-		required: true,
-	},
-	badgeType: {
-		type: String,
-		required: true,
-	},
-	badgeOwnerId: String,
-	badgeOwnerName: String,
-});
+	{ collection: 'credentials' }
+);
 
 module.exports = mongoose.model('Credential', credentialSchema);
