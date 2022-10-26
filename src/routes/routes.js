@@ -22,10 +22,9 @@ const createRouterForModel = (model) => {
 
 	//Get Method
 	router.get('/get', async (req, res) => {
-		const searchValue = new RegExp('^' + req.query.value?.toLowerCase(), 'i');
-		const filter = { [req.query.filter]: { $regex: searchValue } };
+		const filterValue = new RegExp('^' + req.query.value?.toLowerCase(), 'i');
+		const filter = { [req.query.filter]: { $regex: filterValue } };
 		const projection = req.query.props ? req.query.props.replace(',', ' ') : '';
-
 		const page = req.query.page || 1;
 		const limit = req.query.limit || 30;
 
