@@ -29,7 +29,7 @@ const makeAccessGroups = () => {
 		'Bar Access',
 	];
 
-	return groups.map((group, i) => ({ _id: i + 1, groupName: group, groupMembers: [] }));
+	return groups.map((group, i) => ({ _id: i.toString(), groupName: group, groupMembers: [] }));
 };
 
 const makeCardholders = (count) => {
@@ -56,7 +56,7 @@ const makeCardholders = (count) => {
 		const cholderGroups = getUniqueRandomNumbers(Math.floor(Math.random() * 3 + 1), accessGroups.length).map(
 			(num) => {
 				accessGroups[num].groupMembers.push(employeeId);
-				return { _id: num, groupName: accessGroups[num].groupName };
+				return { _id: accessGroups[num]._id, groupName: accessGroups[num].groupName };
 			}
 		);
 
@@ -109,7 +109,7 @@ const getUniqueRandomNumbers = (amt, max, min = 0) => {
 };
 
 const writeJson = (fileName, obj) => {
-	fs.writeFile(`./src/makeFakeData/${fileName}.json`, JSON.stringify(obj), 'utf8', () => {});
+	fs.writeFile(`./makeFakeData/${fileName}.json`, JSON.stringify(obj), 'utf8', () => {});
 };
 
 const { cardholders, credentials, accessGroups } = makeCardholders(500);
