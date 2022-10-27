@@ -48,7 +48,7 @@ const cardholderSchema = new mongoose.Schema(
 		},
 		accessGroups: {
 			required: true,
-			type: [{ groupName: String }],
+			type: [{ _id: String, groupName: String }],
 		},
 	},
 	{ collection: 'cardholders' }
