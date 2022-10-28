@@ -13,31 +13,28 @@ const updateParallelDocuments = async (oldCardholder, newCardholder, docKey, mod
 		...newDocIds.filter((_, i) => oldDocIds[i] !== newDocIds[i]),
 	];
 
-	documentIdsToUpdate.forEach(async (documentId) => {
-		const updatedDocument = await model.findById(documentId);
+	const updatedDocuments = [];
+
+	for (let i = 0; i < documentIdsToUpdate.length; i++) {
+		const documentId = documentIdsToUpdate[i];
+		const foundDocument = await model.findById(documentId);
 
 		if (oldDocIds.includes(documentId)) {
 			// cardholder is removed
-
-			await model.findByIdAndUpdate(documentId, {
-				...updatedDocument._doc,
-				badgeOwnerId: '',
-				badgeOwnerName: '',
-			});
+			const doc = await model.findOneAndUpdate({ _id: documentId }, removeFn(foundDocument._doc), { new: true });
+			updatedDocuments.push(doc);
 		}
+
 		if (newDocIds.includes(documentId)) {
 			// cardholder is added
-
-			await model.findByIdAndUpdate(documentId, {
-				...updatedDocument._doc,
-				badgeOwnerId: newCardholder._id,
-				badgeOwnerName: newCardholder.firstName + ' ' + newCardholder.lastName,
-			});
+			const doc = await model.findOneAndUpdate({ _id: documentId }, addFn(foundDocument._doc), { new: true });
+			updatedDocuments.push(doc);
 		}
-	});
-};
+	}
 
-// updateParallelDocuments(cholder1, cholder2, 'credentials', credentialModel);
+	if (updatedDocuments.length === 0) return { messeage: `No ${docKey} updated` };
+	else return updatedDocuments;
+};
 
 const cardholdersRoutes = () => {
 	const router = express.Router();
@@ -50,9 +47,43 @@ const cardholdersRoutes = () => {
 			const newCardholder = req.body;
 			const oldCardholder = await model.findById(id);
 
-			updateParallelDocuments(oldCardholder, newCardholder, 'credentials', credentialModel);
+			const credentialsQuery = updateParallelDocuments(
+				oldCardholder,
+				newCardholder,
+				'credentials',
+				credentialModel,
+				(cred) => ({
+					...cred,
+					badgeOwnerId: newCardholder._id,
+					badgeOwnerName: newCardholder.firstName + ' ' + newCardholder.lastName,
+				}),
+				(cred) => ({
+					...cred,
+					badgeOwnerId: '',
+					badgeOwnerName: '',
+				})
+			);
 
-			const result = await model.findByIdAndUpdate(id, newCardholder, options).then(async (res) => {});
+			const accessGroupsQuery = updateParallelDocuments(
+				oldCardholder,
+				newCardholder,
+				'accessGroups',
+				accessGroupModel,
+				(group) => ({
+					...group,
+					groupMembers: [...group.groupMembers, newCardholder._id],
+				}),
+				(group) => ({
+					...group,
+					groupMembers: group.groupMembers.filter((memberId) => memberId !== newCardholder._id),
+				})
+			);
+
+			const result = await Promise.all([
+				credentialsQuery,
+				accessGroupsQuery,
+				model.findOneAndUpdate({ _id: id }, newCardholder, options),
+			]);
 
 			res.send(result);
 		} catch (error) {
