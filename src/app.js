@@ -1,10 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const cardholderModel = require('./models/cardholderModel');
-const credentialModel = require('./models/credentialModel');
-const accessGroupModel = require('./models/accessGroupsModel');
-const createRouterForModel = require('./routes/routes');
+const cardholdersRoutes = require('./routes/cardholders.routes');
+const credentialsRoutes = require('./routes/credentials.routes');
+const accessGroupsRoutes = require('./routes/accessGroups.routes');
 
 require('dotenv').config();
 const app = express();
@@ -15,12 +14,15 @@ app.use(cors());
 app.use(morgan('tiny'));
 
 // Routes
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
 	res.status(200).json({ alive: 'True' });
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+	next();
 });
 
-app.use('/cardholders', createRouterForModel(cardholderModel));
-app.use('/credentials', createRouterForModel(credentialModel));
-app.use('/accessGroups', createRouterForModel(accessGroupModel));
+app.use('/cardholders', cardholdersRoutes());
+app.use('/credentials', credentialsRoutes());
+app.use('/accessGroups', accessGroupsRoutes());
 
 module.exports = app;

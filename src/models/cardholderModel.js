@@ -44,11 +44,11 @@ const cardholderSchema = new mongoose.Schema(
 		},
 		credentials: {
 			required: true,
-			type: [{ _id: Number, badgeNumber: Number }],
+			type: [{ _id: String }],
 		},
 		accessGroups: {
 			required: true,
-			type: [{ groupName: String }],
+			type: [{ _id: String, groupName: String }],
 		},
 	},
 	{ collection: 'cardholders' }
