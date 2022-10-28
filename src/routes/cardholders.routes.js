@@ -8,10 +8,9 @@ const updateParallelDocuments = async (oldCardholder, newCardholder, docKey, mod
 	const oldDocIds = oldCardholder[docKey].map((doc) => doc._id);
 	const newDocIds = newCardholder[docKey].map((doc) => doc._id);
 
-	const documentIdsToUpdate = [
-		...oldDocIds.filter((_, i) => oldDocIds[i] !== newDocIds[i]),
-		...newDocIds.filter((_, i) => oldDocIds[i] !== newDocIds[i]),
-	];
+	const documentIdsToUpdate = oldDocIds
+		.filter((x) => !newDocIds.includes(x))
+		.concat(newDocIds.filter((x) => !oldDocIds.includes(x)));
 
 	const updatedDocuments = [];
 
