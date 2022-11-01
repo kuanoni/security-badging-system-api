@@ -13,8 +13,7 @@ const credentialsRoutes = () => {
 				: new RegExp('^' + req.query.value?.toLowerCase(), 'i');
 		const filter = { [req.query.filter]: { $regex: filterValue } };
 		const projection = req.query.props ? req.query.props.replace(',', ' ') : '';
-
-		const page = req.query.page || 1;
+		const page = parseInt(req.query.page || 1);
 		const limit = req.query.limit || 30;
 
 		try {
@@ -24,9 +23,11 @@ const credentialsRoutes = () => {
 				}
 			);
 
-			const count = await model.find(filter, projection).countDocuments();
+			const totalPages = Math.ceil((await model.find(filter, projection).countDocuments()) / limit);
 
-			res.json({ documents: data, count });
+			if (page > totalPages) throw new Error(`Tried fetching page ${page} when there are only ${totalPages}`);
+
+			res.json({ documents: data, page, totalPages });
 		} catch (error) {
 			res.status(400).json({ message: error.message });
 		}
@@ -38,8 +39,7 @@ const credentialsRoutes = () => {
 		const filterValue = new RegExp('^' + req.query.value?.toLowerCase(), 'i');
 		const filter = { [req.query.filter]: { $regex: filterValue }, badgeOwnerId: '', badgeOwnerName: '' };
 		const projection = '_id badgeType';
-
-		const page = req.query.page || 1;
+		const page = parseInt(req.query.page || 1);
 		const limit = req.query.limit || 30;
 
 		try {
@@ -49,9 +49,11 @@ const credentialsRoutes = () => {
 				}
 			);
 
-			const count = await model.find(filter, projection).countDocuments();
+			const totalPages = Math.ceil((await model.find(filter, projection).countDocuments()) / limit);
 
-			res.json({ documents: data, count });
+			if (page > totalPages) throw new Error(`Tried fetching page ${page} when there are only ${totalPages}`);
+
+			res.json({ documents: data, page, totalPages });
 		} catch (error) {
 			res.status(400).json({ message: error.message });
 		}
