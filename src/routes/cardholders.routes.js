@@ -4,9 +4,9 @@ const credentialModel = require('../models/credentialModel');
 const accessGroupModel = require('../models/accessGroupModel');
 const basicRoutes = require('./basicRoutes');
 
-const updateParallelDocuments = async (oldCardholder, newCardholder, docKey, model, addFn, removeFn) => {
-	const oldDocIds = oldCardholder[docKey].map((doc) => doc._id);
-	const newDocIds = newCardholder[docKey].map((doc) => doc._id);
+const updateParallelDocuments = async (oldDocs, newDocs, docKey, model, addFn, removeFn) => {
+	const oldDocIds = oldDocs ? oldDocs.map((doc) => doc._id) : [];
+	const newDocIds = newDocs ? newDocs.map((doc) => doc._id) : [];
 
 	const documentIdsToUpdate = oldDocIds
 		.filter((x) => !newDocIds.includes(x))
@@ -40,15 +40,18 @@ const cardholdersRoutes = () => {
 
 	router.patch('/update/:id', async (req, res) => {
 		try {
-			const id = req.params.id;
+			const { id } = req.params;
 			const options = { new: true };
 
-			const newCardholder = req.body;
 			const oldCardholder = await model.findById(id);
+			const newCardholder = req.body;
+
+			const { credentials: oldCredentials, accessGroups: oldAccessGroups } = oldCardholder;
+			const { credentials: newCredentials, accessGroups: newAccessGroups } = newCardholder;
 
 			const credentialsQuery = updateParallelDocuments(
-				oldCardholder,
-				newCardholder,
+				oldCredentials,
+				newCredentials,
 				'credentials',
 				credentialModel,
 				(cred) => ({
@@ -64,8 +67,8 @@ const cardholdersRoutes = () => {
 			);
 
 			const accessGroupsQuery = updateParallelDocuments(
-				oldCardholder,
-				newCardholder,
+				oldAccessGroups,
+				newAccessGroups,
 				'accessGroups',
 				accessGroupModel,
 				(group) => ({
@@ -90,7 +93,20 @@ const cardholdersRoutes = () => {
 		}
 	});
 
-	router.post('/post', basicRoutes.Post(model));
+	router.post('/post', async (req, res) => {
+		const cardholder = new model(req.body);
+		const validationErrors = cardholder.validateSync()?.errors;
+
+		try {
+			if (validationErrors)
+				throw new Error(Object.keys(validationErrors).map((key) => validationErrors[key].properties.message));
+			const dataToSave = await cardholder.save();
+			res.status(200).json(dataToSave);
+		} catch (error) {
+			res.status(400).json({ message: error.message });
+		}
+	});
+
 	router.get('/get', basicRoutes.Get(model));
 	router.get('/get/:id', basicRoutes.GetById(model));
 	router.delete('/delete/:id', basicRoutes.Delete(model));

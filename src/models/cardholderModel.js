@@ -1,53 +1,62 @@
 const mongoose = require('mongoose');
+const { numbersField, lettersField, emailField, lettersNumbersField } = require('../helpers/utils');
 
 const cardholderSchema = new mongoose.Schema(
 	{
 		_id: {
-			required: true,
 			type: String,
+			validate: {
+				validator: numbersField,
+				message: (props) => `${props.value} is not a valid employee ID`,
+			},
+			required: [true, 'Cardholder employee ID required'],
 		},
 		avatar: {
-			required: true,
+			required: false,
 			type: String,
 		},
 		firstName: {
-			required: true,
 			type: String,
+			validate: { validator: lettersField, message: (props) => `${props.value} is not a valid firstName` },
+			required: [true, 'firstName required'],
 		},
 		lastName: {
-			required: true,
 			type: String,
+			validate: { validator: lettersField, message: (props) => `${props.value} is not a valid lastName` },
+			required: [true, 'lastName required'],
 		},
 		email: {
-			required: true,
 			type: String,
+			validate: { validator: emailField, message: (props) => `${props.value} is not a valid email` },
+			required: [true, 'email required'],
 		},
 		jobTitle: {
-			required: true,
 			type: String,
+			validate: { validator: lettersNumbersField, message: (props) => `${props.value} is not a valid jobTitle` },
+			required: [true, 'jobTitle required'],
 		},
 		profileStatus: {
-			required: true,
+			required: [true, 'profileStatus required'],
 			type: Boolean,
 		},
 		activationDate: {
-			required: true,
+			required: [true, 'activation date required'],
 			type: Date,
 		},
 		expirationDate: {
-			required: true,
+			required: [true, 'expirationDate required'],
 			type: Date,
 		},
 		profileType: {
-			required: true,
+			required: [true, 'profileType required'],
 			type: String,
 		},
 		credentials: {
-			required: true,
+			required: [true, 'credentials required'],
 			type: [{ _id: String }],
 		},
 		accessGroups: {
-			required: true,
+			required: [true, 'accessGroups required'],
 			type: [{ _id: String, groupName: String }],
 		},
 	},
