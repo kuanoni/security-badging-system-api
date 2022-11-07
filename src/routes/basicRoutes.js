@@ -26,7 +26,7 @@ const Get = (model) => async (req, res, next) => {
 				[req.query.filter]: 'asc',
 		  }
 		: req.query.sortBy && {
-				[req.query.sortBy]: req.query.order,
+				[req.query.sortBy]: req.query.order ? req.query.order : 'asc',
 		  };
 
 	try {
