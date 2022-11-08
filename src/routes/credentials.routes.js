@@ -15,13 +15,16 @@ const credentialsRoutes = () => {
 		const projection = req.query.props ? req.query.props.replace(',', ' ') : '';
 		const page = parseInt(req.query.page || 1);
 		const limit = req.query.limit || 30;
+		const sort = req.query.filter
+			? {
+					[req.query.filter]: 'asc',
+			  }
+			: req.query.sortBy && {
+					[req.query.sortBy]: req.query.order ? req.query.order : 'asc',
+			  };
 
 		try {
-			const data = await model.find(filter, projection, { limit, skip: limit * (page - 1) }).sort(
-				req.query.filter && {
-					[req.query.filter]: 'asc',
-				}
-			);
+			const data = await model.find(filter, projection, { limit, skip: limit * (page - 1) }).sort(sort);
 
 			const totalPages = Math.ceil((await model.find(filter, projection).countDocuments()) / limit);
 
