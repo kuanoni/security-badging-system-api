@@ -21,13 +21,14 @@ const Get = (model) => async (req, res, next) => {
 	const projection = req.query.props ? req.query.props.replace(',', ' ') : '';
 	const page = parseInt(req.query.page || 1);
 	const limit = req.query.limit || 30;
-	const sort = req.query.filter
-		? {
-				[req.query.filter]: 'asc',
-		  }
-		: req.query.sortBy && {
-				[req.query.sortBy]: req.query.order ? req.query.order : 'asc',
-		  };
+	const sort =
+		req.query.filter && !req.query.sortBy
+			? {
+					[req.query.filter]: 'asc',
+			  }
+			: req.query.sortBy && {
+					[req.query.sortBy]: req.query.order ? req.query.order : 'asc',
+			  };
 
 	try {
 		const data = await model.find(filter, projection, { limit, skip: limit * (page - 1) }).sort(sort);
