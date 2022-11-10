@@ -112,16 +112,17 @@ const makeCardholders = () => {
 			takenIds.push(employeeId);
 
 			const cardholderAccessGroups = [];
-			let availableAccessGroups = [...accessGroups];
+			const availableAccessGroups = [
+				...accessGroups.map((accessGroup) => ({ _id: accessGroup._id, groupName: accessGroup.groupName })),
+			];
 			const cardholderCredentials = [];
 
 			if (profileStatus) {
 				// assign a couple access groups to cardholder
 				for (let j = 0; j < Math.floor(Math.random() * 3 + 1); j++) {
-					const idx = Math.floor(Math.random() * (accessGroups.length - 1));
-					const accessGroup = accessGroups[idx];
+					const idx = Math.floor(Math.random() * (availableAccessGroups.length - 1));
+					const accessGroup = availableAccessGroups.splice(idx, 1)[0];
 					cardholderAccessGroups.push({ _id: accessGroup._id, groupName: accessGroup.groupName });
-					availableAccessGroups = availableAccessGroups.splice(idx, 1);
 					accessGroups[idx].groupMembers.push(employeeId);
 				}
 
