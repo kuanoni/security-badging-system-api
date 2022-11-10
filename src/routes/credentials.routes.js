@@ -41,8 +41,13 @@ const credentialsRoutes = () => {
 
 	router.get('/getAvailable', async (req, res, next) => {
 		const filterValue = new RegExp('^' + req.query.value?.toLowerCase(), 'i');
-		const filter = { [req.query.filter]: { $regex: filterValue }, badgeOwnerId: '', badgeOwnerName: '' };
-		const projection = '_id badgeType';
+		const filter = {
+			[req.query.filter]: { $regex: filterValue },
+			badgeOwnerId: '',
+			badgeOwnerName: '',
+			status: true,
+		};
+		const projection = '_id badgeType status';
 		const page = parseInt(req.query.page || 1);
 		const limit = req.query.limit || 30;
 		const sort =
