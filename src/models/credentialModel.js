@@ -12,6 +12,26 @@ const credentialSchema = new mongoose.Schema(
 		},
 		badgeOwnerId: String,
 		badgeOwnerName: String,
+		badgeFormat: {
+			type: String,
+			required: true,
+		},
+		activationDate: {
+			type: Date,
+			required: true,
+		},
+		expirationDate: {
+			type: Date,
+			required: true,
+		},
+		status: {
+			type: Boolean,
+			required: true,
+		},
+		partition: {
+			type: String,
+			required: true,
+		},
 	},
 	{ collection: 'credentials' }
 );
