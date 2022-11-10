@@ -1,7 +1,7 @@
 const faker = require('@faker-js/faker').faker;
 const fs = require('fs');
 
-const profiles = [
+const profileTypes = [
 	{
 		type: 'Employee',
 		amt: 300,
@@ -17,32 +17,35 @@ const profiles = [
 	},
 ];
 
-const badgeTypes = profiles.map((cholder) => cholder.type);
+const badgeTypes = profileTypes.map((cholder) => cholder.type);
 
 const makeUnownedCredentials = () => {
 	const multi = 1.25;
 	const credentials = {};
 	badgeTypes.forEach((type) => (credentials[type] = []));
-	const takenIds = [];
 
-	profiles.forEach((profile) => {
+	/*  credentials looks like this:
+    credentials = {
+        'Employee': [],
+        'Contractor': [],
+        'Privileged Visitor': [],
+    } */
+
+	const takenIds = []; // ids kept track of to prevent duplicates
+
+	profileTypes.forEach((profile) => {
 		for (let i = 0; i < profile.amt * multi; i++) {
-			let _id =
-				faker.datatype.number({ min: 10000, max: 99999 }).toString() +
-				'-' +
-				profile.type
-					.split(' ')
-					.map((word) => word[0])
-					.join('');
+			const activationDate = faker.date.past(1);
+			const expirationDate = faker.date.between(
+				activationDate,
+				new Date().setFullYear(new Date().getFullYear() + 5)
+			);
+			const status = new Date(expirationDate) > Date.now();
 
-			while (takenIds.includes(_id))
-				_id =
-					faker.datatype.number({ min: 10000, max: 99999 }).toString() +
-					'-' +
-					profile.type
-						.split(' ')
-						.map((word) => word[0])
-						.join('');
+			let _id = faker.datatype.number({ min: 100000, max: 999999 }).toString();
+
+			// remake id if it's a duplicate
+			while (takenIds.includes(_id)) _id = faker.datatype.number({ min: 100000, max: 999999 }).toString();
 
 			takenIds.push(_id);
 
@@ -51,6 +54,11 @@ const makeUnownedCredentials = () => {
 				badgeType: profile.type,
 				badgeOwnerId: '',
 				badgeOwnerName: '',
+				badgeFormat: pickRandomOutOfList(['HID 2000PGG', 'HID 1326LSS', 'HID 208X']),
+				activationDate,
+				expirationDate,
+				status,
+				partition: pickRandomOutOfList(['BLR01', 'KNS01', 'KNS02', 'LA01', 'LA02', 'NYC01']),
 			});
 		}
 	});
@@ -82,7 +90,7 @@ const makeCardholders = () => {
 	const cardholders = [];
 	const takenIds = [];
 
-	profiles.forEach((profile) => {
+	profileTypes.forEach((profile) => {
 		for (let i = 0; i < profile.amt; i++) {
 			const avatar = faker.image.avatar();
 			const firstName = faker.name.firstName();
@@ -108,6 +116,7 @@ const makeCardholders = () => {
 			const cardholderCredentials = [];
 
 			if (profileStatus) {
+				// assign a couple access groups to cardholder
 				for (let j = 0; j < Math.floor(Math.random() * 3 + 1); j++) {
 					const idx = Math.floor(Math.random() * (accessGroups.length - 1));
 					const accessGroup = accessGroups[idx];
@@ -116,13 +125,13 @@ const makeCardholders = () => {
 					accessGroups[idx].groupMembers.push(employeeId);
 				}
 
+				// assign a couple credentials to cardholder
 				for (let j = 0; j < Math.floor(Math.random() * 2); j++) {
 					const idx = Math.floor(Math.random() * (availableCredentials[profileType].length - 1));
 					const addedCred = availableCredentials[profileType][idx];
-					cardholderCredentials.push({ _id: addedCred._id, badgeType: addedCred.badgeType });
+					cardholderCredentials.push({ _id: addedCred._id, status: addedCred.status });
 
 					availableCredentials[profileType].splice(idx, 1);
-
 					const newIdx = credentials[profileType].findIndex((cred) => cred._id === addedCred._id);
 
 					credentials[profileType][newIdx].badgeOwnerId = employeeId;
