@@ -47,7 +47,7 @@ const credentialsRoutes = () => {
 			badgeOwnerName: '',
 			status: true,
 		};
-		const projection = '_id badgeType status';
+		const projection = '_id badgeType';
 		const page = parseInt(req.query.page || 1);
 		const limit = req.query.limit || 30;
 		const sort =
