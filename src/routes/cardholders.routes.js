@@ -107,9 +107,54 @@ const cardholdersRoutes = () => {
 		}
 	});
 
+	router.delete('/delete/:id', async (req, res) => {
+		try {
+			const id = req.params.id;
+			const cardholder = await model.findById(id);
+
+			const queries = [];
+
+			const credentials = cardholder.credentials;
+			const accessGroups = cardholder.accessGroups;
+
+			credentials.forEach((credential) => {
+				const query = credentialModel.findOneAndUpdate(
+					{ _id: credential._id },
+					{
+						badgeOwnerId: '',
+						badgeOwnerName: '',
+					},
+					{ new: true }
+				);
+
+				queries.push(query);
+			});
+
+			accessGroups.forEach(async (accessGroup) => {
+				const group = await accessGroupModel.findById(accessGroup._id);
+
+				const query = accessGroupModel.findOneAndUpdate(
+					{ _id: accessGroup._id },
+					{
+						...group._doc,
+						groupMembers: group._doc.groupMembers.filter((memberId) => memberId !== cardholder._id),
+					},
+					{ new: true }
+				);
+
+				queries.push(query);
+			});
+
+			const result = await Promise.all([...queries, model.findByIdAndDelete(id)]);
+
+			res.send(result);
+		} catch (error) {
+			res.status(400).json({ message: error.message });
+		}
+	});
+
 	router.get('/get', basicRoutes.Get(model));
 	router.get('/get/:id', basicRoutes.GetById(model));
-	router.delete('/delete/:id', basicRoutes.Delete(model));
 
 	return router;
 };
