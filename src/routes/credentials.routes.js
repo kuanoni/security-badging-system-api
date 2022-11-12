@@ -1,5 +1,4 @@
 const express = require('express');
-const cardholderModel = require('../models/cardholderModel');
 const model = require('../models/credentialModel');
 const basicRoutes = require('./basicRoutes');
 
@@ -75,47 +74,10 @@ const credentialsRoutes = () => {
 		next();
 	});
 
-	router.delete('/delete/:id', async (req, res) => {
-		try {
-			const id = req.params.id;
-			const credential = await model.findById(id);
-
-			const queries = [];
-
-			const cardholderOwner = await cardholderModel.findById(credential.badgeOwnerId);
-
-			if (cardholderOwner._doc) {
-				const newCardholderCredentials = cardholderOwner._doc.credentials.filter((cred) => {
-					console.log(id);
-					console.log(cred._id);
-					return cred._id !== id;
-				});
-
-				queries.push(
-					cardholderModel.findOneAndUpdate(
-						{ _id: cardholderOwner._doc._id },
-						{
-							...cardholderOwner._doc,
-							credentials: newCardholderCredentials,
-						},
-						{
-							new: true,
-						}
-					)
-				);
-			}
-
-			const result = await Promise.all([...queries, model.findByIdAndDelete(id)]);
-
-			res.send(result);
-		} catch (error) {
-			res.status(400).json({ message: error.message });
-		}
-	});
-
 	router.post('/post', basicRoutes.Post(model));
 	router.get('/get/:id', basicRoutes.GetById(model));
 	router.patch('/update/:id', basicRoutes.Update(model));
+	router.delete('/delete/:id', basicRoutes.Delete(model));
 
 	return router;
 };

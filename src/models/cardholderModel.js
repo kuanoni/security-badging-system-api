@@ -53,7 +53,7 @@ const cardholderSchema = new mongoose.Schema(
 		},
 		credentials: {
 			required: [true, 'credentials required'],
-			type: [{ _id: String, status: Boolean }],
+			type: [{ _id: String }],
 		},
 		accessGroups: {
 			required: [true, 'accessGroups required'],
