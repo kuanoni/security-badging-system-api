@@ -84,12 +84,8 @@ const credentialsRoutes = () => {
 
 			const cardholderOwner = await cardholderModel.findById(credential.badgeOwnerId);
 
-			if (cardholderOwner._doc) {
-				const newCardholderCredentials = cardholderOwner._doc.credentials.filter((cred) => {
-					console.log(id);
-					console.log(cred._id);
-					return cred._id !== id;
-				});
+			if (cardholderOwner?._doc) {
+				const newCardholderCredentials = cardholderOwner._doc.credentials.filter((cred) => cred._id !== id);
 
 				queries.push(
 					cardholderModel.findOneAndUpdate(
